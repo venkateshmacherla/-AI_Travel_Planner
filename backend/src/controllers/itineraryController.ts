@@ -274,7 +274,7 @@ export const toggleFavoriteItinerary = async (
 ) => {
   try {
     console.log("FAVORITE HIT");
-    console.log("ID:", req.params.id);
+    console.log("ID: ", req.params.id);
 
     const itinerary = await Itinerary.findOne({
       _id: req.params.id,
