@@ -314,6 +314,38 @@ Trade-Off:
 
 ---
 
+## Custom Feature – Favorite Itineraries
+
+To improve the user experience, a Favorite Itineraries feature was implemented.
+
+Users can mark any generated travel itinerary as a favorite directly from the dashboard by clicking the star icon displayed on each trip card. Favorited trips are visually highlighted and can be quickly identified without opening the itinerary details page.
+
+### How it works
+
+- Each itinerary stores an `isFavorite` flag in the database.
+- Clicking the star icon sends a request to the backend API to toggle the favorite status.
+- The dashboard updates instantly without requiring a page refresh.
+- The "Saved Itineraries" statistic reflects the total number of favorited trips.
+
+### Why this feature was added
+
+Travel planners often generate multiple itineraries before deciding on their final trip. This feature allows users to save and revisit their preferred itineraries easily, making the application more practical and user-friendly.
+
+### Technical Implementation
+
+- Frontend: Next.js, React State Management
+- Backend: Express.js REST API
+- Database: MongoDB
+- API Endpoint: `PUT /api/itineraries/:id/favorite`
+
+This feature demonstrates full-stack functionality involving frontend interaction, API communication, database updates, and real-time UI updates.
+
+### Favorite Feature Design Decision
+
+A simple boolean (`isFavorite`) field was used instead of creating a separate favorites collection. This approach keeps the implementation lightweight, reduces database complexity, and provides faster read operations for a personal travel planning application.
+
+Trade-off: While this approach works well for a single-user itinerary ownership model, a separate collection would be more scalable for applications with advanced bookmarking, sharing, or collaborative features.
+
 ## Future Improvements
 
 - Favorite Trips Feature
