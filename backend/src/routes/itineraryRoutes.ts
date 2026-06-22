@@ -19,6 +19,8 @@ router.post("/", protect, saveItinerary);
 
 router.get("/", protect, getUserItineraries);
 
+router.put("/:id/favorite", protect, toggleFavoriteItinerary);
+
 router.put("/:id/add-activity", protect, addActivity);
 
 router.put("/:id/remove-activity", protect, removeActivity);
@@ -34,7 +36,5 @@ router.get("/test-favorite", (req, res) => {
 router.get("/:id", protect, getItineraryById);
 
 router.delete("/:id", protect, deleteItinerary);
-
-router.put("/:id/favorite", protect, toggleFavoriteItinerary);
 
 export default router;
