@@ -7,6 +7,7 @@ export interface IItinerary extends Document {
   budgetTier: string;
   interests: string[];
   generatedPlan: any;
+  isFavorite: boolean;
 }
 
 const ItinerarySchema = new mongoose.Schema(
@@ -41,6 +42,11 @@ const ItinerarySchema = new mongoose.Schema(
     generatedPlan: {
       type: Object,
       required: true,
+    },
+
+    isFavorite: {
+      type: Boolean,
+      default: false,
     },
   },
   {

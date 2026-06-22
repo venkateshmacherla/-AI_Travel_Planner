@@ -1,6 +1,6 @@
 import { Response } from "express";
 
-import Itinerary from "../models/Itinerary";
+import Itinerary, { IItinerary } from "../models/Itinerary";
 import { AuthRequest } from "../types";
 
 import {
@@ -264,6 +264,40 @@ export const deleteItinerary = async (req: AuthRequest, res: Response) => {
 
     res.status(500).json({
       message: "Failed to delete trip",
+    });
+  }
+};
+
+export const toggleFavoriteItinerary = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    console.log("Favorite route hit:", req.params.id);
+
+    const itinerary = await Itinerary.findOne({
+      _id: req.params.id,
+      userId: req.user?.id,
+    });
+
+    console.log("Found itinerary:", itinerary);
+
+    if (!itinerary) {
+      return res.status(404).json({
+        message: "Itinerary not found",
+      });
+    }
+
+    itinerary.isFavorite = !itinerary.isFavorite;
+
+    await itinerary.save();
+
+    return res.status(200).json(itinerary);
+  } catch (error) {
+    console.error("Favorite Error:", error);
+
+    return res.status(500).json({
+      message: "Unable to update favorite status",
     });
   }
 };

@@ -10,6 +10,7 @@ import {
   regenerateDay,
   getItineraryById,
   deleteItinerary,
+  toggleFavoriteItinerary,
 } from "../controllers/itineraryController";
 
 const router = express.Router();
@@ -27,5 +28,7 @@ router.put("/:id/regenerate-day", protect, regenerateDay);
 router.get("/:id", protect, getItineraryById);
 
 router.delete("/:id", protect, deleteItinerary);
+
+router.put("/:id/favorite", protect, toggleFavoriteItinerary);
 
 export default router;

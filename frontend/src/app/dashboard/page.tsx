@@ -11,6 +11,7 @@ type Itinerary = {
   destination: string;
   durationDays: number;
   budgetTier: string;
+  isFavorite: boolean;
 };
 
 export default function DashboardPage() {
@@ -19,6 +20,8 @@ export default function DashboardPage() {
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
+
+  const favoriteTrips = itineraries.filter((trip) => trip.isFavorite).length;
 
   useEffect(() => {
     const fetchItineraries = async () => {
@@ -47,6 +50,22 @@ export default function DashboardPage() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     router.push('/login');
+  };
+
+  const toggleFavorite = async (tripId: string, currentStatus: boolean) => {
+    try {
+      console.log('Calling:', `/itineraries/${tripId}/favorite`);
+
+      await api.put(`/itineraries/${tripId}/favorite`);
+
+      setItineraries((prev) =>
+        prev.map((trip) =>
+          trip._id === tripId ? { ...trip, isFavorite: !currentStatus } : trip,
+        ),
+      );
+    } catch (error) {
+      console.error('Failed to update favorite', error);
+    }
   };
 
   return (
@@ -100,10 +119,10 @@ export default function DashboardPage() {
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-md">
-            <h3 className="text-sm text-slate-300">Saved Itineraries</h3>
+            <h3 className="text-sm text-slate-300">Favorite Trips</h3>
 
             <p className="mt-3 text-4xl font-bold text-white">
-              {itineraries.length}
+              {favoriteTrips}
             </p>
           </div>
 
@@ -111,7 +130,7 @@ export default function DashboardPage() {
             <h3 className="text-sm text-slate-300">AI Generated Trips</h3>
 
             <p className="mt-3 text-4xl font-bold text-white">
-              {itineraries.length}
+              {favoriteTrips}
             </p>
           </div>
         </div>
@@ -157,14 +176,27 @@ export default function DashboardPage() {
             <div className="space-y-4">
               {itineraries.map((trip) => (
                 <Link href={`/trips/${trip._id}`} key={trip._id}>
-                  <div className="bg-white/5border cursor-pointer rounded-xl border-white/10 p-5 transition-all hover:border-blue-500/50 hover:bg-white/10">
-                    <h4 className="text-lg font-semibold text-white">
-                      {trip.destination}
-                    </h4>
+                  <div className="mb-3 flex min-h-22.5 cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-white/5 px-6 py-5 transition-all hover:border-blue-500/50 hover:bg-white/10">
+                    <div>
+                      <h4 className="text-lg font-semibold text-white">
+                        {trip.destination}
+                      </h4>
 
-                    <p className="mt-1 text-sm text-slate-400">
-                      {trip.durationDays} Days • {trip.budgetTier} Budget
-                    </p>
+                      <p className="mt-1 text-sm text-slate-400">
+                        {trip.durationDays} Days • {trip.budgetTier} Budget
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+
+                        toggleFavorite(trip._id, trip.isFavorite);
+                      }}
+                      className="cursor-pointer p-2 text-3xl hover:scale-110"
+                    >
+                      {trip.isFavorite ? '⭐' : '☆'}
+                    </button>
                   </div>
                 </Link>
               ))}

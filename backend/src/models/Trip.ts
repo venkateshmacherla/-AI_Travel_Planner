@@ -1,11 +1,13 @@
 import mongoose, { Document } from "mongoose";
 
-export interface ITrip extends Document {
+export interface IItinerary extends Document {
   userId: mongoose.Types.ObjectId;
   destination: string;
   durationDays: number;
   budgetTier: string;
   interests: string[];
+  generatedPlan: any;
+  isFavorite: boolean;
 }
 
 const TripSchema = new mongoose.Schema(
@@ -36,10 +38,15 @@ const TripSchema = new mongoose.Schema(
         type: String,
       },
     ],
+
+    isFavorite: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
   },
 );
 
-export default mongoose.model<ITrip>("Trip", TripSchema);
+export default mongoose.model<IItinerary>("Trip", TripSchema);
