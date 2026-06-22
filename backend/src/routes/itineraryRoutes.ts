@@ -25,6 +25,12 @@ router.put("/:id/remove-activity", protect, removeActivity);
 
 router.put("/:id/regenerate-day", protect, regenerateDay);
 
+router.get("/test-favorite", (req, res) => {
+  res.json({
+    message: "Favorite route working",
+  });
+});
+
 router.get("/:id", protect, getItineraryById);
 
 router.delete("/:id", protect, deleteItinerary);
